@@ -23,4 +23,5 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
   Route.resource('/categories', 'CategoriesController').apiOnly()
   Route.resource('/notes', 'NotesController').apiOnly()
+  Route.get('/categories/:id/notes', 'CategoriesController.getNotes')
 }).prefix('api/v1')
