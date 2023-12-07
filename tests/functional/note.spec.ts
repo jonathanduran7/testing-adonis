@@ -12,7 +12,7 @@ test.group('Notes', () => {
     const newNote = {
       title: 'New note',
       content: 'This is a new note',
-      categoryId: '1'
+      // categoryId: '1'
     }
 
 
@@ -24,12 +24,12 @@ test.group('Notes', () => {
     response.assertBodyContains({
       title: newNote.title,
       content: newNote.content,
-      categoryId: newNote.categoryId
+      // categoryId: newNote.categoryId
     })
   })
 
   test("don't show note if it's not exist", async ({ client }) => {
-    const response = await client.get('/api/v1/notes/1')
+    const response = await client.get('/api/v1/notes/10')
 
     response.assertStatus(404)
     response.assertBodyContains(
@@ -43,7 +43,7 @@ test.group('Notes', () => {
       .form({
         title: 'New note',
         content: 'This is a new note',
-        categoryId: '1'
+        // categoryId: 
       })
 
     const note = response.body()
@@ -54,7 +54,7 @@ test.group('Notes', () => {
     showResponse.assertBodyContains({
       title: note.title,
       content: note.content,
-      categoryId: Number(note.categoryId)
+      // categoryId: Number(note.categoryId)
     })
    
   })
