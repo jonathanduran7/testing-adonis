@@ -4,7 +4,7 @@ import { DateTime } from 'luxon'
 import Note from './note.model'
 
 export default class Category extends AppBaseModel {
-    public static table = 'notes'
+    public static table = 'categories'
 
     @column({ isPrimary: true })
     public id: number
