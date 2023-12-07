@@ -28,4 +28,8 @@ export default class CategoriesController {
     public async destroy(ctx: HttpContextContract) {
         return this.categoriesRepository.destroy({ id: ctx.params.id })
     }
+
+    public async getNotes(ctx: HttpContextContract) {
+        return this.categoriesRepository.getNotes({ id: ctx.params.id })
+    }
 }
