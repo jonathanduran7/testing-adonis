@@ -18,7 +18,6 @@ export default class NotesController {
 
     public async show(ctx: HttpContextContract) {
         try {
-            console.log(ctx.params.id)
             return this.notesRepository.show({ id: ctx.params.id })
         } catch (error) {
             console.log(error)
