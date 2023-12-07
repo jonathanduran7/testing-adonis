@@ -47,4 +47,14 @@ export class CategoriesRepository {
             throw new Exception('Hubo un problema al eliminar la categoria', 400)
         }
     }
+
+    async getNotes({ id }: { id: number }) {
+        try {
+            const category = await Category.findOrFail(id);
+            await category.load('notes');
+            return category.notes;
+        } catch (error) {
+            throw new Exception('Hubo un problema al obtener las notas', 400)
+        }
+    }
 }
