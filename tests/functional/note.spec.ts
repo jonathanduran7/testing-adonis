@@ -10,9 +10,9 @@ test.group('Notes', () => {
   test('create a new note', async ({ client }) => {
 
     const newNote = {
-      title: 'New note',
-      content: 'This is a new note',
-      // categoryId: '1'
+      title: 'Compras navidad',
+      content: 'Comprar regalos de navidad para rocco',
+      categoryId: '1'
     }
 
 
@@ -24,7 +24,7 @@ test.group('Notes', () => {
     response.assertBodyContains({
       title: newNote.title,
       content: newNote.content,
-      // categoryId: newNote.categoryId
+      categoryId: newNote.categoryId
     })
   })
 
@@ -41,9 +41,9 @@ test.group('Notes', () => {
     const response = await client.post('/api/v1/notes')
       .accept('application/json')
       .form({
-        title: 'New note',
-        content: 'This is a new note',
-        // categoryId: 
+        title: 'Buscar alquiler',
+        content: 'Buscar alquiler para la casa de la playa',
+        categoryId: 2
       })
 
     const note = response.body()
@@ -54,7 +54,7 @@ test.group('Notes', () => {
     showResponse.assertBodyContains({
       title: note.title,
       content: note.content,
-      // categoryId: Number(note.categoryId)
+      categoryId: Number(note.categoryId)
     })
    
   })
