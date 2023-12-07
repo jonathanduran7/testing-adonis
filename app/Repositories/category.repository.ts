@@ -44,7 +44,7 @@ export class CategoriesRepository {
             await category.delete();
             return { message: 'Categoría eliminada' }
         } catch (error) {
-            throw new Exception('Hubo un problema', 400)
+            throw new Exception('Hubo un problema al eliminar la categoria', 400)
         }
     }
 }
