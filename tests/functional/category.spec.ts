@@ -1,4 +1,5 @@
 import { test } from '@japa/runner'
+import Note from 'App/Models/note.model'
 
 test.group('Categories', () => {
   test('display all categories', async ({ client }) => {
@@ -92,5 +93,42 @@ test.group('Categories', () => {
     deleteResponse.assertBodyContains({
       message: 'Hubo un problema al eliminar la categoria',
     })
+  })
+
+  test('get notes from category', async ({ client }) => {
+
+    await client.post('/api/v1/notes')
+      .accept('application/json')
+      .form({
+        title: 'Navidad',
+        content: 'Comprar pan dulce y sidra',
+        categoryId: 1
+      })
+
+    await client.post('/api/v1/notes')
+      .accept('application/json')
+      .form({
+        title: 'Cumpleaños',
+        content: 'Comprar torta',
+        categoryId: 1
+      })
+
+    await client.post('/api/v1/notes')
+      .accept('application/json')
+      .form({
+        title: 'Tours',
+        content: 'Alquilar auto para el tour',
+        categoryId: 2
+      })
+
+    const getNotesResponse = await client.get(`/api/v1/categories/${2}/notes`)
+
+    getNotesResponse.assertStatus(200)
+
+    const notes = getNotesResponse.body() as Note[]
+
+    if( notes.every(note => { note.categoryId === 2 })){
+      throw new Error('Notes not belong to category')
+    }
   })
 })
