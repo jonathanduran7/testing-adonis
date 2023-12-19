@@ -3,6 +3,12 @@ import Category from "App/Models/category.model";
 
 export class CategoriesRepository {
     async index() {
+        const categories = await Category.all()
+
+        if (categories.length === 0) {
+            return { message: 'No hay categorías' }
+        }
+
         return Category.all();
     }
 
