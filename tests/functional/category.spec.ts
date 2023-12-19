@@ -1,13 +1,39 @@
 import { test } from '@japa/runner'
 import Note from 'App/Models/note.model'
+import { CategoryFactory } from 'Database/factories'
+import Category from 'App/Models/category.model'
 
 test.group('Categories', () => {
-  test('display all categories', async ({ client }) => {
+  test('display empty categories', async ({ client }) => {
     const response = await client.get('/api/v1/categories')
     response.assertStatus(200)
+    response.assertBodyContains({ message: 'No hay categorías' })
   })
 
-  test('create a new category', async ({ client }) => {
+  test('display all categories', async ({ client, assert }) => {
+    await CategoryFactory.query().createMany(5)
+    const response = await client.get('/api/v1/categories')
+    
+    const categories = await Category.query().limit(5).orderBy('id', 'asc')
+
+    response.assertStatus(200)
+    assert.containsSubset(response.body(),categories.map(category => category.toJSON()))
+  })
+
+  test('field name is required', async ({ client}) => {
+    const newCategory = {
+      name: '',
+    }
+
+    const response = await client.post('/api/v1/categories')
+      .accept('application/json')
+      .form(newCategory)
+
+    response.assertStatus(422)
+    response.assertTextIncludes('El campo es requerido')
+  })
+
+  test('create a category', async ({ client }) => {
     const newCategory = {
       name: 'New category',
     }
@@ -17,9 +43,7 @@ test.group('Categories', () => {
       .form(newCategory)
 
     response.assertStatus(200)
-    response.assertBodyContains({
-      name: newCategory.name,
-    })
+    response.assertBodyContains(newCategory)
   })
 
   test("don't show category if it's not exist", async ({ client }) => {
@@ -127,7 +151,7 @@ test.group('Categories', () => {
 
     const notes = getNotesResponse.body() as Note[]
 
-    if( notes.every(note => { note.categoryId === 2 })){
+    if (notes.every(note => { note.categoryId === 2 })) {
       throw new Error('Notes not belong to category')
     }
   })
