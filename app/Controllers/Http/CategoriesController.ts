@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { CategoriesRepository } from 'App/Repositories/category.repository'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 
 export default class CategoriesController {
 
@@ -12,7 +13,16 @@ export default class CategoriesController {
     }
 
     public async store(ctx: HttpContextContract) {
-        const { name } = ctx.request.body()
+
+        const { name } = await ctx.request.validate({
+            schema: schema.create({
+                name: schema.string({ trim: true }, [rules.required()]),
+            }),
+            messages: {
+                'name.required': 'El campo es requerido',
+            }
+        })
+
         return this.categoriesRepository.store({ name })
     }
 
